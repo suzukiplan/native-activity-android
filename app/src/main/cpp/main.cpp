@@ -169,8 +169,8 @@ static void engine_draw_frame(EngineContext *engine) {
     }
 
     // Just fill the screen with a color.
-    glClearColor(((float) engine->state.x) / engine->width, engine->state.angle,
-                 ((float) engine->state.y) / engine->height, 1);
+    glClearColor(((float) engine->state.x) / (float) engine->width, engine->state.angle,
+                 ((float) engine->state.y) / (float) engine->height, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     eglSwapBuffers(engine->display, engine->surface);
@@ -205,8 +205,8 @@ static int32_t engine_handle_input(struct android_app *app,
     auto *engine = (EngineContext *) app->userData;
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
         engine->animating = 1;
-        engine->state.x = AMotionEvent_getX(event, 0);
-        engine->state.y = AMotionEvent_getY(event, 0);
+        engine->state.x = (int) AMotionEvent_getX(event, 0);
+        engine->state.y = (int) AMotionEvent_getY(event, 0);
         return 1;
     }
     return 0;
