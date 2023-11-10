@@ -38,11 +38,11 @@
 /**
  * Our saved state data.
  */
-struct saved_state {
+typedef struct SavedState_ {
     float angle;
     int32_t x;
     int32_t y;
-};
+} SavedState;
 
 /**
  * Shared state for our app.
@@ -60,7 +60,7 @@ typedef struct EngineContext_ {
     EGLContext context;
     int32_t width;
     int32_t height;
-    struct saved_state state;
+    SavedState state;
 } EngineContext;
 
 /**
@@ -220,9 +220,9 @@ static void engine_handle_cmd(struct android_app *app, int32_t cmd) {
     switch (cmd) {
         case APP_CMD_SAVE_STATE:
             // The system has asked us to save our current state.  Do so.
-            engine->app->savedState = malloc(sizeof(struct saved_state));
-            *((struct saved_state *) engine->app->savedState) = engine->state;
-            engine->app->savedStateSize = sizeof(struct saved_state);
+            engine->app->savedState = malloc(sizeof(SavedState));
+            *((SavedState *) engine->app->savedState) = engine->state;
+            engine->app->savedStateSize = sizeof(SavedState);
             break;
         case APP_CMD_INIT_WINDOW:
             // The window is being shown, get it ready.
@@ -330,7 +330,7 @@ void android_main(struct android_app *state) {
 
     if (state->savedState != nullptr) {
         // We are starting with a previous saved state; restore from it.
-        engine.state = *(struct saved_state *) state->savedState;
+        engine.state = *(SavedState *) state->savedState;
     }
 
     // loop waiting for stuff to do.
